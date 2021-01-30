@@ -141,6 +141,8 @@ class DropdownSearch<T> extends StatefulWidget {
   ///text controller to set default search word for example
   final TextEditingController searchBoxController;
 
+  final double heightRow;
+
   DropdownSearch({
     Key key,
     this.onSaved,
@@ -180,6 +182,7 @@ class DropdownSearch<T> extends StatefulWidget {
     this.popupItemDisabled,
     this.popupBarrierColor,
     this.searchBoxController,
+    this.heightRow,
   })  : assert(isFilteredOnline != null),
         assert(dropdownBuilderSupportsNullItem != null),
         assert(enabled != null),
@@ -221,26 +224,30 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
   }
 
   Widget _defaultSelectItemWidget(T data) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: widget.dropdownBuilder != null
-              ? widget.dropdownBuilder(
-                  context,
-                  data,
-                  _selectedItemAsString(data),
-                )
-              : Text(_selectedItemAsString(data),
-                  style: Theme.of(context).textTheme.subtitle1),
-        ),
-        _manageTrailingIcons(data),
-      ],
+    return Container(
+      height: widget.heightRow ?? null,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: widget.dropdownBuilder != null
+                ? widget.dropdownBuilder(
+                    context,
+                    data,
+                    _selectedItemAsString(data),
+                  )
+                : Text(_selectedItemAsString(data),
+                    style: Theme.of(context).textTheme.subtitle1),
+          ),
+          _manageTrailingIcons(data),
+        ],
+      ),
     );
   }
 
   Widget _formField(T value) {
     return Container(
+      height: widget.heightRow ?? null,
       child: FormField(
         enabled: widget.enabled,
         onSaved: widget.onSaved,
@@ -362,7 +369,11 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              child: _selectDialogInstance(data, defaultHeight: 350),
+              child: _selectDialogInstance(data,
+                  defaultHeight: MediaQuery.of(context).size.height -
+                      AppBar().preferredSize.height -
+                      MediaQuery.of(context).padding.top -
+                      MediaQuery.of(context).padding.bottom),
             ),
           );
         });

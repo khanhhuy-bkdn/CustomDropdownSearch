@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Divider(),
               DropdownSearch<UserModel>(
                 searchBoxController: TextEditingController(text: 'Mrs'),
-                mode: Mode.BOTTOM_SHEET,
+                mode: Mode.DIALOG,
                 isFilteredOnline: true,
                 showClearButton: true,
                 showSearchBox: true,
@@ -92,11 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ///BottomSheet Mode with no searchBox
               DropdownSearch<String>(
                 mode: Mode.BOTTOM_SHEET,
-                maxHeight: 300,
+                //maxHeight: MediaQuery.of(context).size.height,
                 items: ["Brazil", "Italia", "Tunisia", 'Canada'],
                 label: "Custom BottomShet mode",
+                heightRow: 40,
                 onChanged: print,
                 selectedItem: "Brazil",
+                showSelectedItem: true,
                 showSearchBox: true,
                 searchBoxDecoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -104,23 +106,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   labelText: "Search a country",
                 ),
                 popupTitle: Container(
+                  color: Colors.blue,
                   height: 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Country',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                  child: Stack(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                          size: 13,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                       ),
-                    ),
+                      Align(
+                        child: Text(
+                          'Bộ lọc',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 popupShape: RoundedRectangleBorder(
